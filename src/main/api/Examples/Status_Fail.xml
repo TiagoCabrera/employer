@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Status xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../Schemas/Status.xsd">
+	<Code>500</Code>
+	<Message>Failure Message</Message>
+</Status>

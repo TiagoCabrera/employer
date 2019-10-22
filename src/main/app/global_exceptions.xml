@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp" xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/current/mule-smtp.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd">
+    <smtp:gmail-connector name="Gmail" validateConnections="true" doc:name="Gmail"/>
+    <choice-exception-strategy name="global_exceptions_for_Employee_API">
+        <catch-exception-strategy when="#[exception.causedBy(org.xml.sax.SAXParseException)]" doc:name="Catch Exception Strategy for schema exceptions">
+            <logger message="Exception Logger : Parse Exception has occurred in Employee API - #[message.id] , Cause : #[org.mule.util.ExceptionUtils.getRootCauseMessage(exception)],  Current flowName: #[flow.name]" level="INFO" doc:name="Exception Logger"/>
+            <set-property propertyName="Subject" value="${mail.subject}" doc:name="Mail Subject"/>
+            <set-payload value="Message ID : #[message.id]#[System.getProperty('line.separator')]#[System.getProperty('line.separator')]Exception cause : #[org.mule.util.ExceptionUtils.getRootCauseMessage(exception)]" doc:name="Mail Body"/>
+            <smtp:outbound-endpoint host="${smtp.host}" port="${smtp.port}" user="${smtp.user}" password="7975475711" connector-ref="Gmail" to="${smtp.to}" from="${smtp.from}" responseTimeout="10000" doc:name="SMTP"/>
+        </catch-exception-strategy>
+        <catch-exception-strategy when="#[exception.causeMatches('*')]" doc:name="Catch Exception Strategy for other exceptions">
+            <logger message="Exception Logger : Parse Exception has occurred in Employee API - #[message.id] , Cause : #[org.mule.util.ExceptionUtils.getRootCauseMessage(exception)],  Current flowName: #[flow.name]" level="INFO" doc:name="Exception Logger"/>
+            <set-property propertyName="Subject" value="${mail.subject}" doc:name="Mail Subject"/>
+            <set-payload value="Message ID : #[message.id]#[System.getProperty('line.separator')]#[System.getProperty('line.separator')]
+
+Exception cause : #[org.mule.util.ExceptionUtils.getRootCauseMessage(exception)]" doc:name="Mail Body"/>
+            <smtp:outbound-endpoint host="${smtp.host}" port="${smtp.port}" user="${smtp.user}" password="7975475711" connector-ref="Gmail" to="${smtp.to}" from="${smtp.from}" responseTimeout="10000" doc:name="SMTP"/>
+        </catch-exception-strategy>
+    </choice-exception-strategy>
+</mule>

@@ -1,0 +1,7 @@
+smtp.host = smtp.gmail.com
+smtp.port = 587
+smtp.user = raghavhegde66@gmail.com
+smtp.to = hegderaghav66@gmail.com
+smtp.from = raghavhegde66@gmail.com
+
+mail.subject = Exception Mail @MuleFlow

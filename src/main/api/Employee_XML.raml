@@ -1,0 +1,24 @@
+#%RAML 0.8
+title: Sample REST API for Employee XML
+version: 1.0
+baseUri: http://localhost:9999
+/API_DEMO:
+  /Employee:
+    description: Path to post Employee XML data
+    post: 
+     description: Path to post Employee XML data
+     body: 
+        application/xml: 
+          schema: !include Schemas/Employee_Info.xsd
+          example: !include Examples/Employee_Info.xml
+     responses: 
+        200: 
+          body: 
+            application/xml: 
+              schema: !include Schemas/Status.xsd 
+              example: !include Examples/Status_Success.xml
+        500: 
+          body: 
+           application/xml: 
+              schema: !include Schemas/Status.xsd 
+              example: !include Examples/Status_Fail.xml
